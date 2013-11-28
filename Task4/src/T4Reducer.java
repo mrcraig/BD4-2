@@ -10,7 +10,7 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 
 
-public class T3Reducer extends TableReducer<ImmutableBytesWritable, IntWritable, ImmutableBytesWritable> {
+public class T4Reducer extends TableReducer<ImmutableBytesWritable, IntWritable, ImmutableBytesWritable> {
 	
 	public void reduce(ImmutableBytesWritable key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
 		//Break current key into artID
@@ -26,6 +26,7 @@ public class T3Reducer extends TableReducer<ImmutableBytesWritable, IntWritable,
 		
 		
 		if(count>=noMods){
+			System.out.println("key: " + Bytes.toLong(key.get()) + " count: " + count);
 			//Emit artID & number of times modified
 			put.add(Bytes.toBytes("q3"),Bytes.toBytes("modify"),Bytes.toBytes(count));
 			//Write to database
