@@ -1,6 +1,8 @@
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.KeyValue;
+import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
@@ -23,7 +25,7 @@ public class Task1 extends Configured implements Tool {
 		conf.addResource("all-client-conf.xml");
 
 		//Point to Jar
-		conf.set("mapred.jar", "file:///users/level4/1002386c/Documents/BD4/AE2/HBase.jar");
+		conf.set("mapred.jar", "file:///users/level4/1002386c/Documents/BD4/AE2/Q1A.jar");
 		
 		//Setup job
 		Job job = new Job(conf);
@@ -57,23 +59,15 @@ public class Task1 extends Configured implements Tool {
 		boolean status = job.waitForCompletion(true);
 		
 		//Read created table to output data to stdout
-		HTable hTable = new HTable(conf,"1002386c");
-		scan.addFamily(Bytes.toBytes("q1"));
-		ResultScanner resScan = hTable.getScanner(scan);
 		
-		System.out.println("RESULTS--");
-		for(Result scanResult:resScan){
-			if(scanResult.isEmpty()){
-				System.out.println("Empty");
-				continue;
-			}
-			byte[] artid = scanResult.getRow();
-			byte[] revid = scanResult.getValue(Bytes.toBytes("q1"),Bytes.toBytes("revid"));
-			
-			System.out.println("K: " + artid + " V: " + revid);
+		HTable hTable = new HTable(conf, "1002386c");
+		ResultScanner scanner = hTable.getScanner(Bytes.toBytes("q1"));
+
+		System.out.println("RESULTS:");
+		for (Result res : scanner) {
+			System.out.println("artID: " + Bytes.toLong(res.getRow()) + " revid: " + Bytes.toLong(res.value()));
 		}
-		
-		resScan.close();
+		scanner.close();
 		hTable.close();
 		
 		return status ? 0 : 1;

@@ -41,7 +41,7 @@ public class T1Mapper extends TableMapper<ImmutableBytesWritable, LongWritable> 
 			long revid = Bytes.toLong(Arrays.copyOfRange(key.get(), 8, key.getLength()));
 			
 			//Output result
-			context.write(new ImmutableBytesWritable(key), new LongWritable(revid));
+			context.write(new ImmutableBytesWritable(key.get()), new LongWritable(revid));
 		}
 	}
 }
