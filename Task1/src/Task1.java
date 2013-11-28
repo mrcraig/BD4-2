@@ -2,6 +2,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.KeyValue;
+import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Result;
@@ -65,8 +66,15 @@ public class Task1 extends Configured implements Tool {
 
 		System.out.println("RESULTS:");
 		for (Result res : scanner) {
-			System.out.println("artID: " + Bytes.toLong(res.getRow()) + " revid: " + Bytes.toLong(res.value()));
+			System.out.println(Bytes.toLong(res.getRow()) + " " + Bytes.toLong(res.value()));
 		}
+		
+		//Delete data after output
+		Delete delete = new Delete(Bytes.toBytes("b"));
+		delete.deleteColumns(Bytes.toBytes("q1"), Bytes.toBytes("revid"));
+		hTable.delete(delete);
+		
+		
 		scanner.close();
 		hTable.close();
 		
