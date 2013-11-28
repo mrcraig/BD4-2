@@ -11,6 +11,7 @@ import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
 import org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;
 import org.apache.hadoop.hbase.util.Bytes;
+import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.util.Tool;
@@ -40,6 +41,7 @@ public class Task3 extends Configured implements Tool {
 		scan.setCacheBlocks(false);
 		
 		job.getConfiguration().setStrings("daterange", arg[0],arg[1]);
+		job.getConfiguration().setInt("modifications", Integer.parseInt(arg[2]));
 		
 		//Run Mapper
 		TableMapReduceUtil.initTableMapperJob(
@@ -47,7 +49,7 @@ public class Task3 extends Configured implements Tool {
 				scan,
 				T3Mapper.class,
 				ImmutableBytesWritable.class,
-				LongWritable.class,
+				IntWritable.class,
 				job);
 		
 		TableMapReduceUtil.initTableReducerJob(
@@ -62,16 +64,16 @@ public class Task3 extends Configured implements Tool {
 		//Read created table to output data to stdout
 		
 		HTable hTable = new HTable(conf, "1002386c");
-		ResultScanner scanner = hTable.getScanner(Bytes.toBytes("q3"));
-
+		ResultScanner scanner = hTable.getScanner(Bytes.toBytes("q3"),Bytes.toBytes("modify"));
+		
 		System.out.println("RESULTS:");
 		for (Result res : scanner) {
-			System.out.println(Bytes.toLong(res.getRow()) + " " + Bytes.toLong(res.value()));
+			System.out.println(Bytes.toLong(res.getRow()) + " " + Bytes.toInt(res.value()));
 		}
 		
 		//Delete data after output
 		Delete delete = new Delete(Bytes.toBytes("b"));
-		delete.deleteColumns(Bytes.toBytes("q3"), Bytes.toBytes("revid"));
+		delete.deleteColumns(Bytes.toBytes("q3"), Bytes.toBytes("modify"));
 		hTable.delete(delete);
 		
 		

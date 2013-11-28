@@ -9,10 +9,11 @@ import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
 import org.apache.hadoop.hbase.mapreduce.TableMapper;
 import org.apache.hadoop.hbase.util.Bytes;
+import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 
 
-public class T3Mapper extends TableMapper<ImmutableBytesWritable, LongWritable> {
+public class T3Mapper extends TableMapper<ImmutableBytesWritable, IntWritable> {
 	
 	public void map(ImmutableBytesWritable key, Result value, Context context) throws IOException, InterruptedException {
 		
@@ -37,11 +38,11 @@ public class T3Mapper extends TableMapper<ImmutableBytesWritable, LongWritable> 
 		
 		//Emit if falls within date range
 		if(ts.after(timeStart) && ts.before(timeEnd)){
-			//Break key to form seperate revid
-			long revid = Bytes.toLong(Arrays.copyOfRange(key.get(), 8, key.getLength()));
+			//Break artID from key
+			byte[] artid = Arrays.copyOfRange(key.get(), 0, 8);
 			
-			//Output result
-			context.write(new ImmutableBytesWritable(key.get()), new LongWritable(revid));
+			//Emit 1 for each article ID
+			context.write(new ImmutableBytesWritable(artid), new IntWritable(1));
 		}
 	}
 }
