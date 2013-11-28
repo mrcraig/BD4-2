@@ -15,13 +15,9 @@ public class T1Reducer extends TableReducer<ImmutableBytesWritable, LongWritable
 		byte[] artID = Arrays.copyOfRange(key.get(), 0, 8);
 		
 		Put put = new Put(artID);
-		
 		for(LongWritable v:values){
-			//Display on stdout since stupidly cannot read table
-			System.out.println("K: " + key.get() + " V: " + v.get());
-			
 			//Emit KV pairs (should be already sorted)
-			put.add(Bytes.toBytes("A"), key.get(), Bytes.toBytes(v.get()));
+			put.add(Bytes.toBytes("q1"), Bytes.toBytes("revid"), Bytes.toBytes(v.get()));
 		}
 	}
 }

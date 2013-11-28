@@ -2,6 +2,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.HTable;
+import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
@@ -16,8 +17,10 @@ import org.apache.hadoop.util.ToolRunner;
 public class Task1 extends Configured implements Tool {
 	
 	public int run(String[] arg) throws Exception{
+		//Set configuration
 		Configuration conf = HBaseConfiguration.create(getConf());
-		conf.set("hbase.zookeeper.quorum", "bigdata-06.dcs.gla.ac.uk");
+		//conf.set("hbase.zookeeper.quorum", "bigdata-06.dcs.gla.ac.uk");
+		conf.addResource("all-client-conf.xml");
 
 		//Point to Jar
 		conf.set("mapred.jar", "file:///users/level4/1002386c/Documents/BD4/AE2/HBase.jar");
@@ -50,8 +53,30 @@ public class Task1 extends Configured implements Tool {
 				job);
 		job.setNumReduceTasks(1);
 		
-		return job.waitForCompletion(true) ? 0 : 1;
+		//Keep note of job status in order to return run status
+		boolean status = job.waitForCompletion(true);
 		
+		//Read created table to output data to stdout
+		HTable hTable = new HTable(conf,"1002386c");
+		scan.addFamily(Bytes.toBytes("q1"));
+		ResultScanner resScan = hTable.getScanner(scan);
+		
+		System.out.println("RESULTS--");
+		for(Result scanResult:resScan){
+			if(scanResult.isEmpty()){
+				System.out.println("Empty");
+				continue;
+			}
+			byte[] artid = scanResult.getRow();
+			byte[] revid = scanResult.getValue(Bytes.toBytes("q1"),Bytes.toBytes("revid"));
+			
+			System.out.println("K: " + artid + " V: " + revid);
+		}
+		
+		resScan.close();
+		hTable.close();
+		
+		return status ? 0 : 1;
 	}
 	
 	public static void main(String[] args) throws Exception{

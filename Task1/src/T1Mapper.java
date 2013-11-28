@@ -32,18 +32,16 @@ public class T1Mapper extends TableMapper<ImmutableBytesWritable, LongWritable> 
 		
 		//For each value, convert to KV and get timestamp
 		KeyValue[] res = value.raw();
-		for(KeyValue result:res){
-			//Treat timestamp as a date
-			Date ts = new Date(result.getTimestamp());
+		//Treat timestamp as a date
+		Date ts = new Date(res[0].getTimestamp());
+		
+		//Emit if falls within date range
+		if(ts.after(timeStart) && ts.before(timeEnd)){
+			//Break key to form seperate revid
+			long revid = Bytes.toLong(Arrays.copyOfRange(key.get(), 8, key.getLength()));
 			
-			//Emit if falls within date range
-			if(ts.after(timeStart) && ts.before(timeEnd)){
-				//Break key to form seperate revid
-				long revid = Bytes.toLong(Arrays.copyOfRange(key.get(), 8, key.getLength()));
-				
-				//Output result
-				context.write(new ImmutableBytesWritable(key), new LongWritable(revid));
-			}
+			//Output result
+			context.write(new ImmutableBytesWritable(key), new LongWritable(revid));
 		}
 	}
 }
