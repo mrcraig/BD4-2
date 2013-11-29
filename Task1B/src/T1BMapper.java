@@ -1,21 +1,19 @@
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 
 import org.apache.hadoop.hbase.KeyValue;
 import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
 import org.apache.hadoop.hbase.mapreduce.TableMapper;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 
 
-public class T1Mapper extends TableMapper<Text, LongWritable> {
+public class T1BMapper extends TableMapper<Text, LongWritable> {
 	
-	public void map(ImmutableBytesWritable key, Result value, Context context) throws IOException, InterruptedException {
+	public void map(Text key, Result value, Context context) throws IOException, InterruptedException {
 		
 		//Import date values from context
 		Date timeStart=null;
@@ -35,14 +33,14 @@ public class T1Mapper extends TableMapper<Text, LongWritable> {
 		KeyValue[] res = value.raw();
 		//Treat timestamp as a date
 		Date ts = new Date(res[0].getTimestamp());
-		byte[] artid = key.get();
+		byte[] artid = res[1].getValue();
 		//Emit if falls within date range
 		if(ts.after(timeStart) && ts.before(timeEnd)){
 			//Break key to form seperate revid
-			long revid = Bytes.toLong(Arrays.copyOfRange(key.get(), 8, key.getLength()));
+			long revid = Bytes.toLong(res[2].getValue());
 			
 			//Output result
-			context.write(new Text (artid), new LongWritable(revid));
+			context.write(new Text(artid), new LongWritable(revid));
 		}
 	}
 }

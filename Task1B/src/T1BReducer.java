@@ -6,13 +6,14 @@ import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
 import org.apache.hadoop.hbase.mapreduce.TableReducer;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
 
 
-public class T1Reducer extends TableReducer<ImmutableBytesWritable, LongWritable, ImmutableBytesWritable> {
+public class T1BReducer extends TableReducer<Text, LongWritable, ImmutableBytesWritable> {
 	
-	public void reduce(ImmutableBytesWritable key, Iterable<LongWritable> values, Context context) throws IOException, InterruptedException {
+	public void reduce(Text key, Iterable<LongWritable> values, Context context) throws IOException, InterruptedException {
 		//Break current key into artID
-		byte[] artID = Arrays.copyOfRange(key.get(), 0, 8);
+		byte[] artID =(key.getBytes());
 		
 		Put put = new Put(artID);
 		for(LongWritable v:values){
@@ -22,3 +23,4 @@ public class T1Reducer extends TableReducer<ImmutableBytesWritable, LongWritable
 		context.write(null, put);
 	}
 }
+

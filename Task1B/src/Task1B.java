@@ -14,8 +14,7 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
-
-public class Task1 extends Configured implements Tool {
+public class Task1B extends Configured implements Tool {
 	
 	public int run(String[] arg) throws Exception{
 		//Set configuration
@@ -24,11 +23,11 @@ public class Task1 extends Configured implements Tool {
 		conf.addResource("all-client-conf.xml");
 
 		//Point to Jar
-		conf.set("mapred.jar", "file:///users/level4/1003648b/BD4/ax2/BD4-2/Q1A.jar");
+		conf.set("mapred.jar", "file:///users/level4/1003648b/BD4/ax2/BD4-2/Q1B.jar");
 		
 		//Setup job
 		Job job = new Job(conf);
-		job.setJarByClass(Task1.class);
+		job.setJarByClass(Task1B.class);
 		
 		//Set up Scanner
 		//CF "WD" for sample dataset
@@ -43,14 +42,14 @@ public class Task1 extends Configured implements Tool {
 		TableMapReduceUtil.initTableMapperJob(
 				"BD4Project2Sample",
 				scan,
-				T1Mapper.class,
+				T1BMapper.class,
 				ImmutableBytesWritable.class,
 				LongWritable.class,
 				job);
 		
 		TableMapReduceUtil.initTableReducerJob(
 				"1003648b",
-				T1Reducer.class,
+				T1BReducer.class,
 				job);
 		job.setNumReduceTasks(1);
 		
@@ -71,8 +70,7 @@ public class Task1 extends Configured implements Tool {
 		Delete delete = new Delete(Bytes.toBytes("b"));
 		delete.deleteColumns(Bytes.toBytes("q1"), Bytes.toBytes("revid"));
 		hTable.delete(delete);
-		
-		
+				
 		scanner.close();
 		hTable.close();
 		
@@ -80,6 +78,6 @@ public class Task1 extends Configured implements Tool {
 	}
 	
 	public static void main(String[] args) throws Exception{
-		System.exit(ToolRunner.run(new Task1(), args));
+		System.exit(ToolRunner.run(new Task1B(), args));
 	}
 }
