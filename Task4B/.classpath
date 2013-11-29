@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="/users/level4/1002386c/Documents/BD4/AE2/hbase-libs/zookeeper-3.4.5-cdh4.4.0.jar"/>
+	<classpathentry kind="lib" path="/users/level4/1002386c/Documents/BD4/AE2/hbase-libs/snappy-java-1.0.4.1.jar"/>
+	<classpathentry kind="lib" path="/users/level4/1002386c/Documents/BD4/AE2/hbase-libs/slf4j-api-1.6.1.jar"/>
+	<classpathentry kind="lib" path="/users/level4/1002386c/Documents/BD4/AE2/hbase-libs/protobuf-java-2.4.0a.jar"/>
+	<classpathentry kind="lib" path="/users/level4/1002386c/Documents/BD4/AE2/hbase-libs/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="/users/level4/1002386c/Documents/BD4/AE2/hbase-libs/jackson-xc-1.8.8.jar"/>
+	<classpathentry kind="lib" path="/users/level4/1002386c/Documents/BD4/AE2/hbase-libs/jackson-mapper-asl-1.8.8.jar"/>
+	<classpathentry kind="lib" path="/users/level4/1002386c/Documents/BD4/AE2/hbase-libs/jackson-jaxrs-1.8.8.jar"/>
+	<classpathentry kind="lib" path="/users/level4/1002386c/Documents/BD4/AE2/hbase-libs/jackson-core-asl-1.8.8.jar"/>
+	<classpathentry kind="lib" path="/users/level4/1002386c/Documents/BD4/AE2/hbase-libs/hbase-0.94.6-cdh4.4.0-security.jar"/>
+	<classpathentry kind="lib" path="/users/level4/1002386c/Documents/BD4/AE2/hbase-libs/hadoop-hdfs-2.0.0-cdh4.4.0.jar"/>
+	<classpathentry kind="lib" path="/users/level4/1002386c/Documents/BD4/AE2/hbase-libs/hadoop-core-2.0.0-mr1-cdh4.4.0.jar"/>
+	<classpathentry kind="lib" path="/users/level4/1002386c/Documents/BD4/AE2/hbase-libs/hadoop-common-2.0.0-cdh4.4.0.jar"/>
+	<classpathentry kind="lib" path="/users/level4/1002386c/Documents/BD4/AE2/hbase-libs/hadoop-auth-2.0.0-cdh4.4.0.jar"/>
+	<classpathentry kind="lib" path="/users/level4/1002386c/Documents/BD4/AE2/hbase-libs/hadoop-annotations-2.0.0-cdh4.4.0.jar"/>
+	<classpathentry kind="lib" path="/users/level4/1002386c/Documents/BD4/AE2/hbase-libs/guava-11.0.2.jar"/>
+	<classpathentry kind="lib" path="/users/level4/1002386c/Documents/BD4/AE2/hbase-libs/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/users/level4/1002386c/Documents/BD4/AE2/hbase-libs/commons-lang-2.5.jar"/>
+	<classpathentry kind="lib" path="/users/level4/1002386c/Documents/BD4/AE2/hbase-libs/commons-configuration-1.6.jar"/>
+	<classpathentry kind="lib" path="/users/level4/1002386c/Documents/BD4/AE2/hbase-libs/commons-cli-1.2.jar"/>
+	<classpathentry kind="lib" path="/users/level4/1002386c/Documents/BD4/AE2/hbase-libs/avro-1.7.4.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
