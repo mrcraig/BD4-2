@@ -65,35 +65,16 @@ public class Task2 extends Configured implements Tool {
 		//Read created table to output data to stdout
 		
 		HTable hTable = new HTable(conf, "1002386c");
-		ResultScanner scanner = hTable.getScanner(Bytes.toBytes("q2"),Bytes.toBytes("revid"));
+		ResultScanner scanner = hTable.getScanner(Bytes.toBytes("q2"),Bytes.toBytes("revstr"));
 		
 		System.out.println("RESULTS:");
-		long current=0;
-		int countrem=0;
-		int countend=0;
-		for (Result res : scanner) {
-			//Remove key obfuscation
-			//byte[] keyrem = Arrays.copyOfRange(res.getRow(), 0, 12);
-			//set current artID
-			long artid = Bytes.toLong(Arrays.copyOfRange(res.getRow(), 0, 12));
-			if(current==artid && countrem>(countend+1)){
-				//On same article, append to end of string
-				System.out.print(" " + Bytes.toLong(res.value()));
-				countend++;
-			} else{
-				// New article, yaaay!
-				current = artid;
-				//Parse artID and count
-				byte[] count = Arrays.copyOfRange(res.getRow(), 12, res.getRow().length);
-				countrem = Bytes.toInt(count);
-				//Display first half of line
-				System.out.print("\n" + artid + " " + Bytes.toInt(count) + " " + Bytes.toLong(res.value()));
-			}
+		for (Result res : scanner){
+			System.out.println(Bytes.toLong(res.getRow()) + " " + Bytes.toString(res.value()));
 		}
 		
 		//Delete data after output
 		Delete delete = new Delete(Bytes.toBytes("b"));
-		delete.deleteColumns(Bytes.toBytes("q2"), Bytes.toBytes("revid"));
+		delete.deleteColumns(Bytes.toBytes("q2"), Bytes.toBytes("revstr"));
 		hTable.delete(delete);
 		
 		

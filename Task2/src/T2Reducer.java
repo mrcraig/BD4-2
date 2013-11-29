@@ -23,19 +23,17 @@ public class T2Reducer extends TableReducer<ImmutableBytesWritable, ImmutableByt
 		}
 		
 		//Output each revision id for pk
-		int count=0;
+		String revstr = "" + revlist.size();
 		for(byte[] b:revlist){
-			//Vary key to make unique
-			byte[] artkey = Bytes.add(key.get(),Bytes.toBytes(count));
-			
-			//Add count into key
-			byte[] concat = Bytes.add(artkey,Bytes.toBytes(revlist.size()));
-			
-			Put put = new Put(concat);
-			put.add(Bytes.toBytes("q2"), Bytes.toBytes("revid"), b);
-			context.write(null,put);
-			count++;
+			//append each revid to string
+			revstr = revstr + " " + Bytes.toLong(b);
 		}
+		
+		Put put = new Put(key.get());
+		put.add(Bytes.toBytes("q2"),Bytes.toBytes("revstr"),Bytes.toBytes(revstr));
+		
+		//Add to DB
+		context.write(null, put);
 		
 	}
 }
