@@ -19,18 +19,12 @@ public class T4Reducer extends TableReducer<ImmutableBytesWritable, IntWritable,
 		for(IntWritable v:values){
 			count++;
 		}
-		
-		int noMods = context.getConfiguration().getInt("modifications", 0);
-		
+
+		//Store artID as key and number modifications as value
 		Put put = new Put(key.get());
+		put.add(Bytes.toBytes("q4"),Bytes.toBytes("modify_int"),Bytes.toBytes(count));
+		//Write to database
+		context.write(null, put);
 		
-		
-		if(count>=noMods){
-			System.out.println("key: " + Bytes.toLong(key.get()) + " count: " + count);
-			//Emit artID & number of times modified
-			put.add(Bytes.toBytes("q3"),Bytes.toBytes("modify"),Bytes.toBytes(count));
-			//Write to database
-			context.write(null, put);
-		}
 	}
 }
